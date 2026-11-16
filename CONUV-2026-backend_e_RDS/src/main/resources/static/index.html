@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão - Produtos, Clientes e Vendas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="container">
+        <nav class="menu-abas">
+            <button type="button" class="aba ativa" data-alvo="secao-produtos">Produtos</button>
+            <button type="button" class="aba" data-alvo="secao-clientes">Clientes</button>
+            <button type="button" class="aba" data-alvo="secao-vendas">Vendas</button>
+        </nav>
+
+        <!-- ==================== 1. CADASTRO DE PRODUTOS ==================== -->
+        <section id="secao-produtos" class="secao">
+            <h1>Cadastro de Produtos</h1>
+
+            <form id="produtoForm">
+                <input type="hidden" id="produtoId">
+
+                <label for="produtoNome">Nome</label>
+                <input type="text" id="produtoNome" maxlength="100" required>
+
+                <label for="produtoDescricao">Descrição</label>
+                <textarea id="produtoDescricao" maxlength="500"></textarea>
+
+                <label for="produtoPreco">Preço (R$)</label>
+                <input type="number" id="produtoPreco" min="0.01" step="0.01" required>
+
+                <div class="botoes">
+                    <button type="submit" id="btnSalvarProduto">Cadastrar</button>
+                    <button type="button" id="btnCancelarProduto" class="secundario" hidden>Cancelar edição</button>
+                </div>
+            </form>
+
+            <p id="mensagemProduto" class="mensagem" role="status"></p>
+
+            <h2>Produtos cadastrados</h2>
+            <div class="tabela-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th>Preço</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaProdutos"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ==================== 2. CADASTRO DE CLIENTES ==================== -->
+        <section id="secao-clientes" class="secao" hidden>
+            <h1>Cadastro de Clientes</h1>
+
+            <form id="clienteForm">
+                <input type="hidden" id="clienteId">
+
+                <label for="clienteNome">Nome completo</label>
+                <input type="text" id="clienteNome" maxlength="100" required>
+
+                <label for="clienteTelefone">Telefone</label>
+                <input type="text" id="clienteTelefone" placeholder="(00) 00000-0000" maxlength="20">
+
+                <label for="clienteEmail">E-mail</label>
+                <input type="email" id="clienteEmail" maxlength="100">
+
+                <div class="botoes">
+                    <button type="submit" id="btnSalvarCliente">Cadastrar</button>
+                    <button type="button" id="btnCancelarCliente" class="secundario" hidden>Cancelar edição</button>
+                </div>
+            </form>
+
+            <p id="mensagemCliente" class="mensagem" role="status"></p>
+
+            <h2>Clientes cadastrados</h2>
+            <div class="tabela-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>E-mail</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaClientes"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ==================== 3. CADASTRO DE VENDAS ==================== -->
+        <section id="secao-vendas" class="secao" hidden>
+            <h1>Cadastro de Vendas</h1>
+
+            <form id="vendaForm">
+                <input type="hidden" id="vendaId">
+
+                <div class="grid-form">
+                    <div class="campo">
+                        <label for="vendaData">Data da venda</label>
+                        <input type="date" id="vendaData" required>
+                    </div>
+
+                    <div class="campo">
+                        <label for="vendaLoja">Loja</label>
+                        <input type="text" id="vendaLoja" placeholder="Ex.: Loja Centro" maxlength="100" required>
+                    </div>
+
+                    <div class="campo">
+                        <label for="vendaCliente">Cliente</label>
+                        <select id="vendaCliente" required>
+                            <option value="">Selecione um cliente</option>
+                        </select>
+                    </div>
+
+                    <div class="campo">
+                        <label for="vendaProduto">Produto</label>
+                        <select id="vendaProduto" required>
+                            <option value="">Selecione um produto</option>
+                        </select>
+                    </div>
+
+                    <div class="campo">
+                        <label for="vendaQuantidade">Quantidade</label>
+                        <input type="number" id="vendaQuantidade" min="1" step="1" value="1" required>
+                    </div>
+
+                    <div class="campo">
+                        <label for="vendaValor">Valor da venda (R$)</label>
+                        <input type="text" id="vendaValor" value="0,00" readonly>
+                        <small class="ajuda">Calculado automaticamente: preço do produto × quantidade.</small>
+                    </div>
+                </div>
+
+                <div class="botoes">
+                    <button type="submit" id="btnSalvarVenda">Cadastrar</button>
+                    <button type="button" id="btnCancelarVenda" class="secundario" hidden>Cancelar edição</button>
+                </div>
+            </form>
+
+            <p id="mensagemVenda" class="mensagem" role="status"></p>
+
+            <h2>Vendas cadastradas</h2>
+            <div class="tabela-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Data</th>
+                            <th>Loja</th>
+                            <th>Cliente</th>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Valor da venda</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaVendas"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
