@@ -65,11 +65,17 @@
                 <label for="clienteNome">Nome completo</label>
                 <input type="text" id="clienteNome" maxlength="100" required>
 
-                <label for="clienteTelefone">Telefone</label>
-                <input type="text" id="clienteTelefone" placeholder="(00) 00000-0000" maxlength="20">
+                <label for="clienteCpf">CPF</label>
+                <input type="text" id="clienteCpf" placeholder="000.000.000-00" maxlength="14">
 
-                <label for="clienteEmail">E-mail</label>
-                <input type="email" id="clienteEmail" maxlength="100">
+                <label for="clienteIdade">Idade</label>
+                <input type="number" id="clienteIdade" min="0" step="1">
+
+                <label for="clienteProfissao">Profissão</label>
+                <input type="text" id="clienteProfissao" maxlength="100">
+
+                <label for="clienteEndereco">Endereço</label>
+                <input type="text" id="clienteEndereco" maxlength="255">
 
                 <div class="botoes">
                     <button type="submit" id="btnSalvarCliente">Cadastrar</button>
@@ -86,8 +92,10 @@
                         <tr>
                             <th>ID</th>
                             <th>Nome</th>
-                            <th>Telefone</th>
-                            <th>E-mail</th>
+                            <th>CPF</th>
+                            <th>Idade</th>
+                            <th>Profissão</th>
+                            <th>Endereço</th>
                             <th>Ações</th>
                         </tr>
                     </thead>

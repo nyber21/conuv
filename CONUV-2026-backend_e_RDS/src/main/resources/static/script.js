@@ -1,15 +1,11 @@
-// URLs da API para cada entidade
+
 const API_PRODUTOS = "/produtos";
 const API_CLIENTES = "/clientes";
 const API_VENDAS = "/vendas";
 
-// Cache local de produtos e clientes para preencher os selects e calcular valores
 let cacheProdutos = [];
 let cacheClientes = [];
 
-// ================= UTILITÁRIOS =================
-
-// Exibe mensagens para o usuário (aceita a aba/contexto da mensagem)
 function exibirMensagem(elementoMensagem, texto, erro = false) {
     if (!elementoMensagem) return;
     elementoMensagem.textContent = texto;
@@ -36,12 +32,11 @@ async function requisitar(url, metodo = "GET", dados = null) {
         throw new Error(detalhe || `Erro HTTP ${resposta.status}`);
     }
 
-    // Se a resposta for vazia (ex: DELETE bem-sucedido), retorna array vazio ou null
+    
     const textoResposta = await resposta.text();
     return textoResposta ? JSON.parse(textoResposta) : [];
 }
 
-// ================= ABAS / NAVEGAÇÃO =================
 document.querySelectorAll(".aba").forEach(botao => {
     botao.addEventListener("click", () => {
         document.querySelectorAll(".aba").forEach(b => b.classList.remove("ativa"));
@@ -53,7 +48,7 @@ document.querySelectorAll(".aba").forEach(botao => {
 });
 
 
-// ================= 1. PRODUTOS =================
+// PRODUTOS
 const formProduto = document.getElementById("produtoForm");
 const campoProdutoId = document.getElementById("produtoId") || document.getElementById("id");
 const campoProdutoNome = document.getElementById("produtoNome") || document.getElementById("nome");
@@ -65,7 +60,7 @@ const listaProdutos = document.getElementById("listaProdutos");
 const mensagemProduto = document.getElementById("mensagemProduto") || document.getElementById("mensagem");
 
 function renderizarProdutos(produtos) {
-    cacheProdutos = produtos; // Atualiza o cache para usar nas Vendas
+    cacheProdutos = produtos; 
     listaProdutos.replaceChildren();
 
     produtos.forEach(produto => {
@@ -183,12 +178,14 @@ if (btnCancelarProduto) {
 }
 
 
-// ================= 2. CLIENTES =================
+// CLIENTES
 const formCliente = document.getElementById("clienteForm");
 const campoClienteId = document.getElementById("clienteId");
 const campoClienteNome = document.getElementById("clienteNome");
-const campoClienteTelefone = document.getElementById("clienteTelefone");
-const campoClienteEmail = document.getElementById("clienteEmail");
+const campoClienteCpf = document.getElementById("clienteCpf");
+const campoClienteIdade = document.getElementById("clienteIdade");
+const campoClienteProfissao = document.getElementById("clienteProfissao");
+const campoClienteEndereco = document.getElementById("clienteEndereco");
 const btnSalvarCliente = document.getElementById("btnSalvarCliente");
 const btnCancelarCliente = document.getElementById("btnCancelarCliente");
 const listaClientes = document.getElementById("listaClientes");
@@ -211,8 +208,10 @@ function renderizarClientes(clientes) {
 
         adicionarCelula(cliente.id);
         adicionarCelula(cliente.nome);
-        adicionarCelula(cliente.telefone);
-        adicionarCelula(cliente.email);
+        adicionarCelula(cliente.cpf);
+        adicionarCelula(cliente.idade);
+        adicionarCelula(cliente.profissao);
+        adicionarCelula(cliente.endereco);
 
         const celulaAcoes = document.createElement("td");
         celulaAcoes.className = "acoes";
@@ -249,8 +248,10 @@ async function carregarClientes() {
 function editarCliente(cliente) {
     campoClienteId.value = cliente.id;
     campoClienteNome.value = cliente.nome;
-    campoClienteTelefone.value = cliente.telefone ?? "";
-    campoClienteEmail.value = cliente.email ?? "";
+    campoClienteCpf.value = cliente.cpf ?? "";
+    campoClienteIdade.value = cliente.idade ?? "";
+    campoClienteProfissao.value = cliente.profissao ?? "";
+    campoClienteEndereco.value = cliente.endereco ?? "";
 
     btnSalvarCliente.textContent = "Salvar alterações";
     if (btnCancelarCliente) btnCancelarCliente.hidden = false;
@@ -273,8 +274,10 @@ if (formCliente) {
 
         const cliente = {
             nome: campoClienteNome.value.trim(),
-            telefone: campoClienteTelefone.value.trim(),
-            email: campoClienteEmail.value.trim()
+            cpf: campoClienteCpf.value.trim(),
+            idade: Number(campoClienteIdade.value),
+            profissao: campoClienteProfissao.value.trim(),
+            endereco: campoClienteEndereco.value.trim()
         };
 
         if (id) cliente.id = Number(id);
@@ -311,7 +314,7 @@ if (btnCancelarCliente) {
 }
 
 
-// ================= 3. VENDAS =================
+// VENDAS 
 const formVenda = document.getElementById("vendaForm");
 const campoVendaId = document.getElementById("vendaId");
 const campoVendaData = document.getElementById("vendaData");
@@ -325,7 +328,7 @@ const btnCancelarVenda = document.getElementById("btnCancelarVenda");
 const listaVendas = document.getElementById("listaVendas");
 const mensagemVenda = document.getElementById("mensagemVenda");
 
-// Popula dinamicamente as listas suspensas (Selects) com os produtos e clientes cadastrados
+
 function atualizarSelectsVendas() {
     if (selectVendaCliente) {
         selectVendaCliente.innerHTML = `<option value="">Selecione um cliente</option>` +
@@ -338,7 +341,6 @@ function atualizarSelectsVendas() {
     }
 }
 
-// Calcula automaticamente o valor total da venda (preço unitário do produto × quantidade)
 function calcularValorVenda() {
     if (!selectVendaProduto || !campoVendaQuantidade || !campoVendaValor) return;
     const produtoId = Number(selectVendaProduto.value);
@@ -370,10 +372,9 @@ function renderizarVendas(vendas) {
             return celula;
         }
 
-        // Suporta tanto propriedades em camelCase quanto snake_case vindas do banco (ex: id_cliente ou clienteId)
-        const clienteId = venda.id_cliente ?? venda.clienteId;
-        const produtoId = venda.id_produto ?? venda.produtoId;
-        const valorVenda = venda.valor_venda ?? venda.valor;
+        const clienteId = venda.id_cliente ?? venda.idCliente;
+        const produtoId = venda.id_produto ?? venda.idProduto;
+        const valorVenda = venda.valor_venda ?? venda.valorVenda;
 
         const clienteObj = cacheClientes.find(c => c.id === clienteId);
         const produtoObj = cacheProdutos.find(p => p.id === produtoId);
@@ -425,8 +426,8 @@ function editarVenda(venda) {
     campoVendaId.value = venda.id;
     campoVendaData.value = venda.data ?? "";
     campoVendaLoja.value = venda.loja ?? "";
-    selectVendaCliente.value = venda.id_cliente ?? venda.clienteId ?? "";
-    selectVendaProduto.value = venda.id_produto ?? venda.produtoId ?? "";
+    selectVendaCliente.value = venda.id_cliente ?? venda.idCliente ?? "";
+    selectVendaProduto.value = venda.id_produto ?? venda.idProduto ?? "";
     campoVendaQuantidade.value = venda.quantidade ?? 1;
     calcularValorVenda();
 
@@ -455,7 +456,6 @@ if (formVenda) {
         const produto = cacheProdutos.find(p => p.id === produtoId);
         const valorCalculado = produto ? produto.preco * quantidade : 0;
 
-        // Estrutura enviada compatível com chaves estrangeiras comuns de banco de dados
         const venda = {
             data: campoVendaData.value,
             loja: campoVendaLoja.value.trim(),
@@ -501,7 +501,6 @@ if (btnCancelarVenda) {
 
 // ================= INICIALIZAÇÃO GERAL =================
 async function inicializarSistema() {
-    // Carrega clientes e produtos primeiro para que as opções existam quando as vendas forem carregadas
     await carregarClientes();
     await carregarProdutos();
     await carregarVendas();
