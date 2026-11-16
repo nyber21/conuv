@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "CrudProdutosApplication",
+            "request": "launch",
+            "mainClass": "br.com.conuv.crud_produtos.CrudProdutosApplication",
+            "projectName": "crud_produtos"
+        },
+        {
             "type": "chrome",
             "request": "launch",
             "name": "Open index.html",
